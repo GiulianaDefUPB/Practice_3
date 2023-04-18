@@ -3,12 +3,14 @@ using Serilog;
 
 //create the logger and setup your sinks, filters and properties
 Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("logs.log")
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
+Log.Information("You are running the app in the {EnvironmentValue} environment", builder.Environment.EnvironmentName);
 // Add services to the container.
 
 builder.Services.AddControllers();
