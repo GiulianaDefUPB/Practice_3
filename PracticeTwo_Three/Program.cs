@@ -1,7 +1,7 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
 
-//create the logger and setup your sinks, filters and properties
+//1 create the logger and setup your sinks, filters and properties
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs.log")
     .WriteTo.Console()
@@ -11,10 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
 Log.Information("You are running the app in the {EnvironmentValue} environment", builder.Environment.EnvironmentName);
-// Add services to the container.
+// 2 Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//  Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
 var configurationBuilder = new ConfigurationBuilder()
@@ -35,9 +35,10 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// 3 Build
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 4 Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "QA" || app.Environment.EnvironmentName == "UAT")
 {
     app.UseSwagger();
@@ -50,4 +51,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// 5 Run
 app.Run();
