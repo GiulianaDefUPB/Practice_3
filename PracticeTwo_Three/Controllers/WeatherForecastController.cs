@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace PracticeTwo.Controllers;
+namespace UPB.PracticeTwo_Three.Controllers;
 
 [ApiController]
 [Route("[controller]")]
