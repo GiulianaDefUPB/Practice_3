@@ -1,5 +1,6 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
+using UPB.PracticeTwo_Three.Managers;
 
 //1 create the logger and setup your sinks, filters and properties
 Log.Logger = new LoggerConfiguration()
@@ -12,6 +13,7 @@ builder.Host.UseSerilog();
 
 Log.Information("You are running the app in the {EnvironmentValue} environment", builder.Environment.EnvironmentName);
 // 2 Add services to the container.
+builder.Services.AddSingleton<PatientManger>();//almacena los datos globalmente mientras la app siga viva 
 
 builder.Services.AddControllers();
 //  Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

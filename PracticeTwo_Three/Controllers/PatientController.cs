@@ -9,10 +9,10 @@ namespace UPB.PracticeTwo_Three.Controllers;
 // Change route name [Route("[controller]")] 
 public class PatientController : ControllerBase //controller base para que sea de tipo web api
 {
-   private PatientManger _patientManager;
-    public PatientController()
+   private readonly PatientManger _patientManager;
+    public PatientController(PatientManger patientManager)
     {
-        _patientManager = new PatientManger();
+        _patientManager = patientManager;
     }
 
     [HttpGet]
@@ -31,20 +31,22 @@ public class PatientController : ControllerBase //controller base para que sea d
 
     [HttpPut]
     [Route("{ci}")]
-    public Patient Put([FromRoute] int ci)
+    //se puede enivar desde el body un paciente que match ci
+    public Patient Put([FromRoute] int ci, [FromBody] Patient patient2Update)
     {
-        return _patientManager.Put(ci);
+        return _patientManager.Update(ci);
     }
 
     [HttpPost]
-    public Patient Post()
+    public Patient Post([FromBody] Patient patient2Create)
     {
-        return _patientManager.Post();
+        return _patientManager.Create(patient2Create.Name, patient2Create.LastName, patient2Create.CI, patient2Create.BloodType);
     }
 
     [HttpDelete]
-    public Patient Delete()
+    [Route("{ci}")]
+    public Patient Delete([FromRoute] int ci)
     {
-        return new Patient();
+        return _patientManager.Delete(ci);
     }
 }
