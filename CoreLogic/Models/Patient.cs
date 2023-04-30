@@ -1,4 +1,4 @@
-namespace UPB.PracticeTwo_Three.Models;
+namespace UPB.CoreLogic.Models;
 
 public class Patient
 {

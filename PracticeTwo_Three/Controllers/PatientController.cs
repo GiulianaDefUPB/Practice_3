@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using UPB.PracticeTwo_Three.Models;
-using UPB.PracticeTwo_Three.Managers;
+using UPB.CoreLogic.Models;
+using UPB.CoreLogic.Managers;
 
 namespace UPB.PracticeTwo_Three.Controllers;
 
@@ -18,7 +18,6 @@ public class PatientController : ControllerBase //controller base para que sea d
     [HttpGet]
     public List<Patient> Get()
     {
-
         return _patientManager.GetAll();
     }
 

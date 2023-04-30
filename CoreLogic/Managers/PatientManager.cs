@@ -1,6 +1,6 @@
-using UPB.PracticeTwo_Three.Models;
+using UPB.CoreLogic.Models;
 
-namespace UPB.PracticeTwo_Three.Managers;
+namespace UPB.CoreLogic.Managers;
 
 public class PatientManger
 {
@@ -30,7 +30,7 @@ public class PatientManger
         } 
         
         Patient patientFound;
-        patientFound = _patients.Find(patient => patient.CI == ci);
+        patientFound = _patients.Find(patient => patient.CI == ci); // predicados
 
         if (patientFound == null)
         {
