@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
 using UPB.CoreLogic.Managers;
+using UPB.PracticeTwo_Three.Middlewares;
 
 //1 create the logger and setup your sinks, filters and properties
 Log.Logger = new LoggerConfiguration()
@@ -42,15 +43,19 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 // 4 Configure the HTTP request pipeline.
+app.UseGlobalExceptionHandler();
+//app.UseExceptionHandler();
+//app.UseHttpsRedirection();
+//app.UseStaticFiles();
+//app.UseRouting();
+//app.UseCors();
+//app.UseAuthentication();
+//app.UseAuthorization();
 if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "QA" || app.Environment.EnvironmentName == "UAT")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-//app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

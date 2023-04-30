@@ -44,7 +44,7 @@ public class PatientManger
     {
         Patient createdPatient = new Patient()
         {
-            Name = name, 
+            Name = name, // capitalize
             LastName = lastName,
             CI = ci,
             BloodType = bloodType
