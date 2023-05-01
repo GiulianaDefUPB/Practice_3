@@ -13,22 +13,31 @@ public class PatientManger
     }
     public List<Patient> GetAll()
     {
-        
         return _patients;
     }
 
     public Patient GetByID(int ci)
     {
-        return _patients.Find(patient => patient.CI == ci);
+         if (ci < 0)
+        {
+            throw new Exception("Invalid CI");
+        } 
+        Patient patientFound = _patients.Find(patient => patient.CI == ci); // predicados
+
+        if (patientFound == null)
+        {
+            throw new Exception("Patient not found");
+        }
+        return patientFound;
         // Find propio de Enumerable
     }
 
-    public Patient Update(int ci)
+    public Patient Update(int ci, string name, string lastName)
     {
        
         if (ci < 0)
         {
-            throw new Exception("CI invalido");
+            throw new Exception("Invalid CI");
         } 
         
         Patient patientFound;
@@ -36,16 +45,23 @@ public class PatientManger
 
         if (patientFound == null)
         {
-            throw new Exception("Patient didn't found");
+            throw new Exception("Patient not found");
         }
-        patientFound.Name = "Cambiado";
+        patientFound.Name = name;
+        patientFound.LastName = lastName;
         return patientFound;
     }
 
     public Patient Create(string name, string lastName, int ci)
     {
+        if (ci < 0)
+        {
+            throw new Exception("Invalid CI");
+        } 
+
         var rand = new Random();
         string bloodType = _bloodTypes[rand.Next(0,5)];
+
         Patient createdPatient = new Patient()
         {
             Name = name, // capitalize
@@ -59,8 +75,18 @@ public class PatientManger
     }
     public Patient Delete(int ci)
     {
+        if (ci < 0)
+        {
+            throw new Exception("Invalid CI");
+        } 
+
         int patient2DeleteIndex = _patients.FindIndex(patient => patient.CI == ci);
+        if (patient2DeleteIndex == -1)
+        {
+            throw new Exception("Patient not found");
+        }
+        Patient patient2Delete = _patients[patient2DeleteIndex];
         _patients.RemoveAt(patient2DeleteIndex);
-        return new Patient();
+        return patient2Delete;
     }
 }

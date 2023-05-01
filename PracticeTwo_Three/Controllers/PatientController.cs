@@ -33,7 +33,7 @@ public class PatientController : ControllerBase //controller base para que sea d
     //se puede enivar desde el body un paciente que match ci
     public Patient Put([FromRoute] int ci, [FromBody] Patient patient2Update)
     {
-        return _patientManager.Update(ci);
+        return _patientManager.Update(ci, patient2Update.Name, patient2Update.LastName);
     }
 
     [HttpPost]
