@@ -12,6 +12,10 @@ public class PatientManger
     }
     public List<Patient> GetAll(string path)
     {
+        if (!File.Exists(path))
+        {
+            throw new Exception("Empty data base.");
+        }
         List<Patient> patientList = new List<Patient>();
 
         int numProperties = typeof(Patient).GetProperties().Length;
@@ -41,6 +45,11 @@ public class PatientManger
 
     public Patient GetByID(int ci, string path)
     {
+        if (!File.Exists(path))
+        {
+            throw new Exception("Empty database.");
+        }
+
          if (ci < 0)
         {
             throw new Exception("Invalid CI");
@@ -58,7 +67,10 @@ public class PatientManger
 
     public Patient Update(int ci, string name, string lastName, string path)
     {
-       
+        if (!File.Exists(path))
+        {
+            throw new Exception("Empty data base.");
+        }
         if (ci < 0)
         {
             throw new Exception("Invalid CI");
@@ -128,6 +140,10 @@ public class PatientManger
     
     public Patient Delete(int ci, string path)
     {
+        if (!File.Exists(path))
+        {
+            throw new Exception("Empty data base.");
+        }
         if (ci < 0)
         {
             throw new Exception("Invalid CI");

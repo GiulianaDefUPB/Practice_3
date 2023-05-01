@@ -14,11 +14,15 @@ public class PatientController : ControllerBase //controller base para que sea d
     public PatientController(PatientManger patientManager)
     {
         _patientManager = patientManager;
-        var builder = new ConfigurationBuilder()
-                               .SetBasePath(Directory.GetCurrentDirectory())
-                                .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true);
+  
+        // Use the environment to read the appropriate appsettings file
+        var configuration = new ConfigurationBuilder()
+                                .SetBasePath(Directory.GetCurrentDirectory())
+                                .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true)
+                                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
+                                .AddEnvironmentVariables();
 
-        _PatientFilePath = builder.Build().GetSection("Path").GetSection("PatientsFilePath").Value;
+        _PatientFilePath = configuration.Build().GetSection("Path").GetSection("PatientsFilePath").Value;
     }
 
     [HttpGet]
