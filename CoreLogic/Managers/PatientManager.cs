@@ -69,7 +69,7 @@ public class PatientManger
     {
         if (!File.Exists(path))
         {
-            throw new Exception("Empty data base.");
+            throw new Exception("Empty database.");
         }
         if (ci < 0)
         {
@@ -107,6 +107,17 @@ public class PatientManger
 
     public Patient Create(string name, string lastName, int ci, string path)
     {
+        if (File.Exists(path))
+        {
+            Patient patientFound;
+            patientFound = this.Search(ci, path); // predicados
+
+            if (patientFound != null)
+            {
+                throw new Exception("Patient already exists");
+            }
+        }
+
         if (ci < 0)
         {
             throw new Exception("Invalid CI");
@@ -142,7 +153,7 @@ public class PatientManger
     {
         if (!File.Exists(path))
         {
-            throw new Exception("Empty data base.");
+            throw new Exception("Empty database.");
         }
         if (ci < 0)
         {
