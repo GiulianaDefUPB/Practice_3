@@ -10,15 +10,21 @@ namespace UPB.PracticeTwo_Three.Controllers;
 public class PatientController : ControllerBase //controller base para que sea de tipo web api
 {
    private readonly PatientManger _patientManager;
+   private string _LogFilePath;
     public PatientController(PatientManger patientManager)
     {
         _patientManager = patientManager;
+        var builder = new ConfigurationBuilder()
+                               .SetBasePath(Directory.GetCurrentDirectory())
+                                .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true);
+
+        _LogFilePath = builder.Build().GetSection("Path").GetSection("PatientsFilePath").Value;
     }
 
     [HttpGet]
     public List<Patient> Get()
     {
-        return _patientManager.GetAll();
+        return _patientManager.GetAll(_LogFilePath);
     }
 
     [HttpGet]
@@ -39,7 +45,7 @@ public class PatientController : ControllerBase //controller base para que sea d
     [HttpPost]
     public Patient Post([FromBody] Patient patient2Create)
     {
-        return _patientManager.Create(patient2Create.Name, patient2Create.LastName, patient2Create.CI);
+        return _patientManager.Create(patient2Create.Name, patient2Create.LastName, patient2Create.CI, _LogFilePath);
     }
 
     [HttpDelete]

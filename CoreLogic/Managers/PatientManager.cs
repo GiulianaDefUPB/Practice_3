@@ -1,3 +1,4 @@
+using System.Reflection;
 using UPB.CoreLogic.Models;
 
 namespace UPB.CoreLogic.Managers;
@@ -9,10 +10,23 @@ public class PatientManger
     public PatientManger()
     {
         _patients = new List<Patient>();
-        _bloodTypes = new List<string> { "A", "B", "O", "AB"};
+        _bloodTypes = new List<string> { "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"};
     }
-    public List<Patient> GetAll()
+    public List<Patient> GetAll(string path)
     {
+        /*
+        StreamReader reader = new StreamReader(path);
+
+        string line = reader.ReadLine();
+
+        while (!reader.EndOfStream)
+        {
+            line = reader.ReadLine();
+        // do something with the line…
+        }
+        reader.Close();*/
+        if (_patients.Count > 0)
+            _patients[0].Name = path;
         return _patients;
     }
 
@@ -52,7 +66,7 @@ public class PatientManger
         return patientFound;
     }
 
-    public Patient Create(string name, string lastName, int ci)
+    public Patient Create(string name, string lastName, int ci, string path)
     {
         if (ci < 0)
         {
@@ -60,7 +74,7 @@ public class PatientManger
         } 
 
         var rand = new Random();
-        string bloodType = _bloodTypes[rand.Next(0,5)];
+        string bloodType = _bloodTypes[rand.Next(0,_bloodTypes.Count)];
 
         Patient createdPatient = new Patient()
         {
@@ -71,6 +85,19 @@ public class PatientManger
         };
 
         _patients.Add(createdPatient);
+
+        List<String> patientData = new List<string>();
+        
+        foreach (PropertyInfo property in createdPatient.GetType().GetProperties())
+        {
+            patientData.Add(property.GetValue(createdPatient).ToString());
+        }
+
+        StreamWriter writer = new StreamWriter(path, true);
+        string rawData = string.Join(",", patientData);
+        writer.WriteLine(rawData);
+        writer.Close();
+
         return createdPatient;
     }
     public Patient Delete(int ci)
