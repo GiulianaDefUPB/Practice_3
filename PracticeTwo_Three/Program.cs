@@ -15,7 +15,7 @@ builder.Host.UseSerilog();
 Log.Information("You are running the app in the {EnvironmentValue} environment", builder.Environment.EnvironmentName);
 // 2 Add services to the container.
 // Singleton vs Transient vs Scoped
-builder.Services.AddSingleton<PatientManger>();//almacena los datos globalmente mientras la app siga viva 
+builder.Services.AddTransient<PatientManger>();//almacena los datos globalmente mientras la app siga viva 
 
 builder.Services.AddControllers();
 //  Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
