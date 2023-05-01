@@ -39,7 +39,7 @@ public class PatientController : ControllerBase //controller base para que sea d
     [HttpPost]
     public Patient Post([FromBody] Patient patient2Create)
     {
-        return _patientManager.Create(patient2Create.Name, patient2Create.LastName, patient2Create.CI, patient2Create.BloodType);
+        return _patientManager.Create(patient2Create.Name, patient2Create.LastName, patient2Create.CI);
     }
 
     [HttpDelete]

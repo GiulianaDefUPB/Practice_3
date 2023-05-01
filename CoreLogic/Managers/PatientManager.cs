@@ -5,9 +5,11 @@ namespace UPB.CoreLogic.Managers;
 public class PatientManger
 {
     private List<Patient> _patients;
+    private List<string> _bloodTypes;
     public PatientManger()
     {
         _patients = new List<Patient>();
+        _bloodTypes = new List<string> { "A", "B", "O", "AB"};
     }
     public List<Patient> GetAll()
     {
@@ -40,8 +42,10 @@ public class PatientManger
         return patientFound;
     }
 
-    public Patient Create(string name, string lastName, int ci, string bloodType)
+    public Patient Create(string name, string lastName, int ci)
     {
+        var rand = new Random();
+        string bloodType = _bloodTypes[rand.Next(0,5)];
         Patient createdPatient = new Patient()
         {
             Name = name, // capitalize
