@@ -3,15 +3,34 @@ using Serilog;
 using UPB.CoreLogic.Managers;
 using UPB.PracticeTwo_Three.Middlewares;
 
-//1 create the logger and setup your sinks, filters and properties
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.File("logs.log")
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
+var configurationBuilder = new ConfigurationBuilder()
+        .SetBasePath(builder.Environment.ContentRootPath)
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: false, reloadOnChange: true)
+        .AddEnvironmentVariables();
+
+IConfiguration Configuration = configurationBuilder.Build();
+
+//1 create the logger and setup your sinks, filters and properties
+if (builder.Environment.EnvironmentName == "Development")
+{
+    Log.Logger = new LoggerConfiguration()
+    .WriteTo.File(Configuration.GetSection("LogPath").Value)
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+}
+else
+{
+    Log.Logger = new LoggerConfiguration()
+    .WriteTo.File(Configuration.GetSection("LogPath").Value)
+    .CreateBootstrapLogger();
+}
+    
 Log.Information("You are running the app in the {EnvironmentValue} environment", builder.Environment.EnvironmentName);
 // 2 Add services to the container.
 // Singleton vs Transient vs Scoped
@@ -21,13 +40,7 @@ builder.Services.AddControllers();
 //  Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-var configurationBuilder = new ConfigurationBuilder()
-        .SetBasePath(builder.Environment.ContentRootPath)
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: false, reloadOnChange: true)
-        .AddEnvironmentVariables();
 
-IConfiguration Configuration = configurationBuilder.Build();
 string siteTitle = Configuration.GetSection("Title").Value;
 
 builder.Services.AddSwaggerGen(options =>

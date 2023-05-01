@@ -1,11 +1,12 @@
 using System.Globalization;
+using Serilog;
 
 namespace UPB.PracticeTwo_Three.Middlewares;
 
 public class ExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;
-
+    private string _environment;
     public ExceptionHandlerMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -20,7 +21,8 @@ public class ExceptionHandlerMiddleware
         }
         catch (System.Exception ex)
         {
-            // Log ex.Message
+            Log.Error("Error: {exception}.", ex.Message);
+
             HandleException(context, ex);
         }
 
