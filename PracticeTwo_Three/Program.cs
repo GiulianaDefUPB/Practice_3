@@ -1,21 +1,12 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
+using UPB.CoreLogic.Managers;
+using UPB.PracticeTwo_Three.Middlewares;
 
-//create the logger and setup your sinks, filters and properties
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.File("logs.log")
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
-
-Log.Information("You are running the app in the {EnvironmentValue} environment", builder.Environment.EnvironmentName);
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
 
 var configurationBuilder = new ConfigurationBuilder()
         .SetBasePath(builder.Environment.ContentRootPath)
@@ -24,6 +15,32 @@ var configurationBuilder = new ConfigurationBuilder()
         .AddEnvironmentVariables();
 
 IConfiguration Configuration = configurationBuilder.Build();
+
+//1 create the logger and setup your sinks, filters and properties
+if (builder.Environment.EnvironmentName == "Development")
+{
+    Log.Logger = new LoggerConfiguration()
+    .WriteTo.File(Configuration.GetSection("Path").GetSection("LogPath").Value)
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+}
+else
+{
+    Log.Logger = new LoggerConfiguration()
+    .WriteTo.File(Configuration.GetSection("Path").GetSection("LogPath").Value)
+    .CreateBootstrapLogger();
+}
+    
+Log.Information("You are running the app in the {EnvironmentValue} environment", builder.Environment.EnvironmentName);
+// 2 Add services to the container.
+// Singleton vs Transient vs Scoped
+builder.Services.AddTransient<PatientManger>();//almacena los datos globalmente mientras la app siga viva 
+
+builder.Services.AddControllers();
+//  Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+
+
 string siteTitle = Configuration.GetSection("Title").Value;
 
 builder.Services.AddSwaggerGen(options =>
@@ -35,19 +52,25 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// 3 Build
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 4 Configure the HTTP request pipeline.
+app.UseGlobalExceptionHandler();
+//app.UseExceptionHandler();
+//app.UseHttpsRedirection();
+//app.UseStaticFiles();
+//app.UseRouting();
+//app.UseCors();
+//app.UseAuthentication();
+//app.UseAuthorization();
 if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "QA" || app.Environment.EnvironmentName == "UAT")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
 
+// 5 Run
 app.Run();
