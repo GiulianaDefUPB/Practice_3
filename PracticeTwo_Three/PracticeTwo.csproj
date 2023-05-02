@@ -13,5 +13,8 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../CoreLogic/CoreLogic.csproj"/>
+  </ItemGroup>
 
 </Project>
