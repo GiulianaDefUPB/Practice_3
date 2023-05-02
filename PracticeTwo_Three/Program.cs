@@ -20,14 +20,14 @@ IConfiguration Configuration = configurationBuilder.Build();
 if (builder.Environment.EnvironmentName == "Development")
 {
     Log.Logger = new LoggerConfiguration()
-    .WriteTo.File(Configuration.GetSection("LogPath").Value)
+    .WriteTo.File(Configuration.GetSection("Path").GetSection("LogPath").Value)
     .WriteTo.Console()
     .CreateBootstrapLogger();
 }
 else
 {
     Log.Logger = new LoggerConfiguration()
-    .WriteTo.File(Configuration.GetSection("LogPath").Value)
+    .WriteTo.File(Configuration.GetSection("Path").GetSection("LogPath").Value)
     .CreateBootstrapLogger();
 }
     
